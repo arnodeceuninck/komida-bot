@@ -1,0 +1,15 @@
+[Unit]
+Description = Bot for getting the komida (student restaurant) menu in Discord
+After = network.target
+
+[Service]
+Type = simple
+WorkingDirectory = /home/pi/komida-bot
+ExecStart = /home/pi/komida-bot/venv/bin/python /home/pi/komida-bot/main.py
+Restart = on-failure
+SyslogIdentifier = Komidabot
+RestartSec = 5
+TimeoutStartSec = infinity
+
+[Install]
+WantedBy = multi-user.target

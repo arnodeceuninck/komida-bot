@@ -56,7 +56,7 @@ def get_date(date_str: str):
         return today + timedelta(days=(weekday_num - today.weekday()) % 7)
 
 
-@tree.command(name="komida", description="Get the komida menu of the day")
+@tree.command(name="komida", description="Get the komida menu of the day", guilds=list([discord.Object(guild_id) for guild_id in [802509903540912188, 629674224985964579, 693029155398221864, 765945206763028591, 1055830903663898674]])) # Bot test, Master Comp, WINAK, 3e bach, bib vriendjes
 async def komida_menu(interaction, location: str, date: str = None):
     """"
     Get the komida menu of the day.
