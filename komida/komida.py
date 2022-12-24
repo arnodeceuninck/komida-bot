@@ -20,7 +20,7 @@ def menu_item_to_string(menu_item):
 
 
 def get_menu(location, date):
-    assert location.upper() in locations
+    assert location in locations
 
     location_id = locations[location][0]
     location_name = locations[location][1]

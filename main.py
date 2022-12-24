@@ -82,6 +82,7 @@ async def komida_menu(interaction, location: str, date: str = None):
     """
     # remove quotes from the location
     location = location.replace('"', '')
+    location = location.upper()
     assert location.upper() in komida.locations, "Invalid location"
 
     menu_date = get_date(date)
@@ -113,4 +114,4 @@ async def komida_menu(interaction, location: str, date: str = None):
 
 
 # run the bot
-client.run("ENTER YOUR TOKEN")
+client.run(DISCORD_TOKEN)
