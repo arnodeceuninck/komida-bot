@@ -11,7 +11,7 @@ icons = {"concept salade": "🥗", "broodje in de kijker": "🥖", "maaltijden o
 
 
 def menu_item_to_string(menu_item):
-    section = menu_item["SectionName"].strip().lower() # Strip because there are some trailing spaces
+    section = menu_item["SectionName"].strip().lower()  # Strip because there are some trailing spaces
     if section in icons:
         icon = icons[section]
     else:
@@ -27,6 +27,7 @@ def get_menu(location, date):
 
     # put date in yyy-mm-dd format
     date_str = date.strftime("%Y-%m-%d")
+    datetext = date.strftime("%A %d %B")
 
     # get the menu
     url = f"https://app.growzer.be/MenuPlanner/GetMenuPlanner?locationId={location_id}&stringDate={date_str}&customerId={KOMIDA_CUSTOMER_ID}"
@@ -37,9 +38,11 @@ def get_menu(location, date):
 
     # get the menu items
     menu_items = menu["data"]["menuPlannerList"]
-    text = "\n".join([f"{menu_item_to_string(item)}" for item in menu_items])
+    if len(menu_items) == 0:
+        text = f"No menu found. Please check the date and location and make sure Komida isn't closed on given date."
+    else:
+        text = "\n".join([f"{menu_item_to_string(item)}" for item in menu_items])
 
-    datetext = date.strftime("%A %d %B")
     full_text = f"Menu from {datetext} in {location_name}:\n\n{text}"
 
     return full_text
