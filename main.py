@@ -26,7 +26,7 @@ async def on_ready():
     print("ready")
 
 
-def get_date(date_str):
+def get_date(date_str: str):
     # Date is either "YYYY-MM-DD" or "DD-MM-YYYY" or "DD/MM/YYYY", or the weekday name
     # If it's a weekday name, return the date of the next occurrence of that weekday
     # If it's a date, return the date
@@ -48,7 +48,7 @@ def get_date(date_str):
         else:
             day, month, year = date_str.split("-")
             return date(int(year), int(month), int(day))
-    elif date in weekdays:
+    elif date_str.lower() in weekdays:
         # get the date of the next occurrence of the weekday
         weekday = date_str.lower()
         today = date.today()
@@ -56,7 +56,7 @@ def get_date(date_str):
         return today + timedelta(days=(weekday_num - today.weekday()) % 7)
 
 
-@tree.command(name="komida", description="Get the komida menu of the day", guild=discord.Object(id=802509903540912188))
+@tree.command(name="komida", description="Get the komida menu of the day")
 async def komida_menu(interaction, location: str, date: str = None):
     """"
     Get the komida menu of the day.
@@ -66,7 +66,7 @@ async def komida_menu(interaction, location: str, date: str = None):
     location: str
         The location of the komida. Can be "CST", "CMI", "CGB", "CDE", "HZS" or "ONLINE".
     date: str
-        The date of the menu. Can be "YYYY-MM-DD", "DD-MM-YYYY", "DD/MM/YYYY", or the weekday name (e.g. tuesday).
+        The date of the menu (e.g. 01/12/2022 or tuesday). Can be "YYYY-MM-DD", "DD-MM-YYYY", "DD/MM/YYYY", or the weekday name (e.g. tuesday).
         The default is today. If the date is in the weekend, the menu of the next Monday will be returned.
     """
     assert location.upper() in ["CST", "CMI", "CGB", "CDE", "HZS", "ONLINE"], "Invalid location"
