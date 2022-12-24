@@ -33,6 +33,7 @@ def get_date(date_str: str):
     # If it's a date in the wrong format, return None
 
     weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    weekdays_dutch = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
 
     if date_str is None:
         return date.today()
@@ -48,12 +49,21 @@ def get_date(date_str: str):
         else:
             day, month, year = date_str.split("-")
             return date(int(year), int(month), int(day))
-    elif date_str.lower() in weekdays:
+    elif date_str.lower() in weekdays or date_str.lower() in weekdays_dutch:
         # get the date of the next occurrence of the weekday
         weekday = date_str.lower()
         today = date.today()
-        weekday_num = weekdays.index(weekday)
+        if weekday in weekdays:
+            weekday_num = weekdays.index(weekday)
+        else:
+            weekday_num = weekdays_dutch.index(weekday)
         return today + timedelta(days=(weekday_num - today.weekday()) % 7)
+    elif date_str.lower() == "tomorrow" or date_str.lower() == "morgen":
+        return date.today() + timedelta(days=1)
+    elif date_str.lower() == "overmorgen":
+        return date.today() + timedelta(days=2)
+    elif date_str.lower() == "vandaag" or date_str.lower() == "today":
+        return date.today()
 
 
 @tree.command(name="komida", description="Get the komida menu of the day", guilds=list([discord.Object(guild_id) for guild_id in [802509903540912188, 629674224985964579, 693029155398221864, 765945206763028591, 1055830903663898674]])) # Bot test, Master Comp, WINAK, 3e bach, bib vriendjes
@@ -69,6 +79,8 @@ async def komida_menu(interaction, location: str, date: str = None):
         The date of the menu (e.g. 01/12/2022 or tuesday). Can be "YYYY-MM-DD", "DD-MM-YYYY", "DD/MM/YYYY", or the weekday name (e.g. tuesday).
         The default is today. If the date is in the weekend, the menu of the next Monday will be returned.
     """
+    # remove quotes from the location
+    location = location.replace('"', '')
     assert location.upper() in ["CST", "CMI", "CGB", "CDE", "HZS", "ONLINE"], "Invalid location"
 
     menu_date = get_date(date)
@@ -91,7 +103,7 @@ async def komida_menu(interaction, location: str, date: str = None):
     else:
         await interaction.response.send_message(f"Retrieving the menu for {location} on {menu_date.strftime('%d/%m/%Y')}...", view=view)
 
-    text = komida.get_menu("CST", menu_date)
+    text = komida.get_menu(location, menu_date)
     if text == "":
         text = "No menu found."
 
