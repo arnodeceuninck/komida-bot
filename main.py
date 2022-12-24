@@ -5,6 +5,7 @@ import discord
 from discord import app_commands
 
 import komida
+from config import DISCORD_TOKEN
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -66,7 +67,7 @@ def get_date(date_str: str):
         return date.today()
 
 
-@tree.command(name="komida", description="Get the komida menu of the day") #, guilds=list([discord.Object(guild_id) for guild_id in [802509903540912188, 629674224985964579, 693029155398221864, 765945206763028591, 1055830903663898674]])) # Bot test, Master Comp, WINAK, 3e bach, bib vriendjes
+@tree.command(name="komida", description="Get the komida menu of the day", guilds=list([discord.Object(guild_id) for guild_id in [802509903540912188, 629674224985964579, 693029155398221864, 765945206763028591, 1055830903663898674]])) # Bot test, Master Comp, WINAK, 3e bach, bib vriendjes
 async def komida_menu(interaction, location: str, date: str = None):
     """"
     Get the komida menu of the day.
@@ -81,7 +82,7 @@ async def komida_menu(interaction, location: str, date: str = None):
     """
     # remove quotes from the location
     location = location.replace('"', '')
-    assert location.upper() in ["CST", "CMI", "CGB", "CDE", "HZS", "ONLINE"], "Invalid location"
+    assert location.upper() in komida.locations, "Invalid location"
 
     menu_date = get_date(date)
 

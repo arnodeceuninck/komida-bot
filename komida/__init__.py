@@ -1,1 +1,1 @@
-from .komida import get_menu
+from .komida import get_menu, locations
